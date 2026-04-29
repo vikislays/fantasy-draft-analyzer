@@ -6,7 +6,7 @@ def print_menu():
     print("Main Menu")
     print("===============================")
     print("1 - Print Player Card")
-    print("2 - Top Ten Players by Points")
+    print("2 - Top Players by Points")
     print("3 - Quit")
     print("\n")
 
@@ -111,6 +111,7 @@ def get_longest_name_length(players):
             maximum_length = len(player)
 
     return maximum_length
+
 
 def main():
     players = load_file()
