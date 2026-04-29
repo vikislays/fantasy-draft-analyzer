@@ -165,10 +165,14 @@ def main():
 
                 longest = get_longest_name_length(top_players)
 
+                if len(top_players) < number_of_ranked_players:
+                    number_of_ranked_players = len(top_players)
+                
                 print("\n")
                 print("===============================")
                 print(f"Top {number_of_ranked_players} Players by Points")
                 print("===============================")
+                    
                 for i in range(number_of_ranked_players):
                     name = top_players[i][0]
                     padding_needed = longest - len(name)
