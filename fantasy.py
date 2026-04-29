@@ -18,7 +18,14 @@ def load_file():
     return players
 
 
-def print_player_card(player_name, position, games):
+def print_player_card(player_name, players):
+    position = ""
+    games = list()
+    for row in players:
+        if row[0] == player_name:       
+            position = row[1]
+            games.append((row[2], row[3]))
+
     print("===============================")
     print(f"{player_name}, {position}")
     print("===============================")
@@ -44,13 +51,12 @@ def print_player_card(player_name, position, games):
 
 
 def find_player(players, player_name):
-    games = list()
+    matched_players = []
     for row in players:
-        if row[0] == player_name:
-            position = row[1]
-            games.append((row[2], row[3]))
-
-    print_player_card(player_name, position, games)
+        if player_name.lower() in row[0].lower():
+            if row[0] not in matched_players: 
+                matched_players.append(row[0])
+    return matched_players    
 
 
 def round_number(point):
@@ -81,12 +87,28 @@ def main():
     while True:
         try:
             print_menu()
-            menu_selection = int(input("Enter [1-6] for the menu option you would like to select: "))
+            menu_selection = int(input("Enter [1-3] for the menu option you would like to select: "))
             
             if menu_selection == 1:
                 player_name = input("Enter player name: ")
-                player_name = "Cade Otton"
-                find_player(players, player_name)
+                matched_players = find_player(players, player_name)
+                if len(matched_players) == 0:
+                    print("No players found.")
+                elif len(matched_players) == 1:
+                    print_player_card(matched_players[0], players)  
+                else:
+                    print("Matched multiple players.")
+                    for i in range(0, len(matched_players)):
+                        print(f"{i + 1}. {matched_players[i]}")
+                    try:
+                        player_index = int(input("Choose which one you want by entering number next to name:"))
+                        if player_index in range(1, len(matched_players) + 1):
+                            print_player_card(matched_players[player_index - 1], players)
+                        else:
+                            print("Invalid input.")    
+                    except ValueError:
+                        print("Invalid input.")
+
             elif menu_selection == 2:
                 player_position = input("Please choose position (WR, RB, TE, ALL(default)): ")
                 player_position = player_position.upper()
