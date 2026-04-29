@@ -98,16 +98,16 @@ def main():
                     print("Invalid input. Try one of the options.")
                 
                 total_number_of_players = len(player_totals)
-                number_of_ranked_players = 10  
+                  
                 try:
                     number_of_ranked_players = int(input(f"Please choose how many players you'd like to compare (1-{total_number_of_players}): "))
                     #print(f"total number of ranked players:{number_of_ranked_players}, total number of players:{total_number_of_players}")
                     if number_of_ranked_players not in range(1, total_number_of_players):
-                        print(f"Invalid Selection. Choose number between 1 and {total_number_of_players}.")
+                        print(f"Invalid Selection. Choose number between 1 and {total_number_of_players}. Default: 10")
                         continue    
                 except ValueError:
-                    print("Invalid Selection.")
-                    continue
+                    number_of_ranked_players = 10
+                
                 totals_list = []
                 for name in player_totals:
                     points = player_totals[name][0]
