@@ -2,10 +2,13 @@ import csv
 from decimal import Decimal, ROUND_HALF_UP
 
 def print_menu():
-    print("---Main Menu---")
-    print("1 - Print Player Statistics")
+    print("===============================")
+    print("Main Menu")
+    print("===============================")
+    print("1 - Print Player Card")
     print("2 - Top Ten Players by Points")
     print("3 - Quit")
+    print("\n")
 
 
 def load_file():
@@ -26,6 +29,7 @@ def print_player_card(player_name, players):
             position = row[1]
             games.append((row[2], row[3]))
 
+    print("\n")
     print("===============================")
     print(f"{player_name}, {position}")
     print("===============================")
@@ -36,9 +40,10 @@ def print_player_card(player_name, players):
         if points:
             total_points += round_number(points)
             games_played += 1
-            print(f"GW {game[0]}: {points} pts")
+            print(f"GW {game[0]}: \t {points} pts")
         else:
-            print(f"GW {game[0]}: BYE")
+            print(f"GW {game[0]}: \t BYE")
+    
     if games_played > 0:
         average = round(total_points/games_played, 1)
     else:
@@ -48,6 +53,7 @@ def print_player_card(player_name, players):
     print(f"Total points: {total_points}")
     print(f"Games played: {games_played}")
     print(f"Points per game: {average}")
+    print("\n")
 
 
 def find_player(players, player_name):
@@ -96,6 +102,16 @@ def get_top_players(player_totals, player_position, number_of_ranked_players):
 
     return totals_list[0:number_of_ranked_players]
 
+
+def get_longest_name_length(players):
+    maximum_length = 0
+    for row in players:
+        player = row[0]
+        if len(player) > maximum_length:
+            maximum_length = len(player)
+
+    return maximum_length
+
 def main():
     players = load_file()
     player_totals = sum_player_totals(players)
@@ -117,7 +133,7 @@ def main():
                     for i in range(0, len(matched_players)):
                         print(f"{i + 1}. {matched_players[i]}")
                     try:
-                        player_index = int(input("Choose which one you want by entering number next to name:"))
+                        player_index = int(input("Choose which one you want by entering number next to name: "))
                         if player_index in range(1, len(matched_players) + 1):
                             print_player_card(matched_players[player_index - 1], players)
                         else:
@@ -139,7 +155,6 @@ def main():
                 total_number_of_players = len(player_totals)
                 try:
                     number_of_ranked_players = int(input(f"Please choose how many players you'd like to compare (1-{total_number_of_players}): "))
-                    #print(f"total number of ranked players:{number_of_ranked_players}, total number of players:{total_number_of_players}")
                     if number_of_ranked_players not in range(1, total_number_of_players + 1):
                         print(f"Invalid Selection. Choose number between 1 and {total_number_of_players}. Default: 10")
                         continue    
@@ -148,14 +163,23 @@ def main():
 
                 top_players = get_top_players(player_totals, player_position, number_of_ranked_players)
 
-                print("===Top Ten Players by Points===")
+                longest = get_longest_name_length(top_players)
+
+                print("\n")
+                print("===============================")
+                print(f"Top {number_of_ranked_players} Players by Points")
+                print("===============================")
                 for i in range(number_of_ranked_players):
                     name = top_players[i][0]
+                    padding_needed = longest - len(name)
+                    padded_name = name
+                    for pad in range(padding_needed):
+                        padded_name += " "
+
                     points = top_players[i][1]
                     position = top_players[i][2]
-                    print(f"{i + 1}. {name} ({position}): {points} pts")
-
-                
+                    print(f"{i + 1}. \t{padded_name} ({position}): {points} pts")
+                print("\n")
             elif menu_selection == 3:
                 break
             else:
