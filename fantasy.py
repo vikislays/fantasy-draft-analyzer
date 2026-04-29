@@ -29,8 +29,10 @@ def print_player_card(player_name, position, games):
             print(f"GW {game[0]}: {points} pts")
         else:
             print(f"GW {game[0]}: BYE")
-        
-    average = round(total_points/games_played, 1)
+    if games_played > 0:
+        average = round(total_points/games_played, 1)
+    else:
+        average = 0
     
     print("===============================")
     print(f"Total points: {total_points}")
@@ -44,7 +46,6 @@ def find_player(players, player_name):
             position = row[1]
             games.append((row[2], row[3]))
 
-         
     print_player_card(player_name, position, games)
 
 def sum_player_totals(players):
@@ -72,7 +73,7 @@ def main():
             
             if menu_selection == 1:
                 player_name = input("Enter player name: ")
-                player_name = "Cade Otton"
+                #player_name = "Cade Otton"
                 find_player(players, player_name)
             elif menu_selection == 2:
                 player_position = input("Please choose position (WR, RB, TE, ALL(default)): ")
@@ -88,7 +89,7 @@ def main():
                 number_of_ranked_players = 10  # default
                 try:
                     number_of_ranked_players = int(input(f"Please choose how many players you'd like to compare (1-{total_number_of_players}): "))
-                    print(f"total number of ranked players:{number_of_ranked_players}, total number of players:{total_number_of_players}")
+                    #print(f"total number of ranked players:{number_of_ranked_players}, total number of players:{total_number_of_players}")
                     if number_of_ranked_players not in range(1, total_number_of_players):
                         print(f"Invalid Selection. Choose number between 1 and {total_number_of_players}.")
                         continue    
