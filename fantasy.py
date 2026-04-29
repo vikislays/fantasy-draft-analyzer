@@ -80,6 +80,22 @@ def sum_player_totals(players):
     return player_totals
 
 
+def get_top_players(player_totals, player_position, number_of_ranked_players):
+    totals_list = []
+    for name in player_totals:
+        points = player_totals[name][0]
+        position = player_totals[name][1]
+
+        if position == player_position or player_position == "ALL":
+            totals_list.append([name, points, position])
+
+    for i in range(len(totals_list)):
+        for j in range(i + 1, len(totals_list)):
+            if totals_list[j][1] > totals_list[i][1]:
+                totals_list[i], totals_list[j] = totals_list[j], totals_list[i]
+
+    return totals_list[0:number_of_ranked_players]
+
 def main():
     players = load_file()
     player_totals = sum_player_totals(players)
@@ -118,9 +134,9 @@ def main():
                 
                 if player_position not in ("WR", "RB", "TE", "ALL"):
                     print("Invalid input. Try one of the options.")
+                    continue
                 
                 total_number_of_players = len(player_totals)
-                  
                 try:
                     number_of_ranked_players = int(input(f"Please choose how many players you'd like to compare (1-{total_number_of_players}): "))
                     #print(f"total number of ranked players:{number_of_ranked_players}, total number of players:{total_number_of_players}")
@@ -129,25 +145,14 @@ def main():
                         continue    
                 except ValueError:
                     number_of_ranked_players = 10
-                
-                totals_list = []
-                for name in player_totals:
-                    points = player_totals[name][0]
-                    position = player_totals[name][1]
 
-                    if position == player_position or player_position == "ALL":
-                        totals_list.append([name, points, position])
-            
-                for i in range(len(totals_list)):
-                    for j in range(i + 1, len(totals_list)):
-                        if totals_list[j][1] > totals_list[i][1]:
-                            totals_list[i], totals_list[j] = totals_list[j], totals_list[i]
+                top_players = get_top_players(player_totals, player_position, number_of_ranked_players)
 
                 print("===Top Ten Players by Points===")
                 for i in range(number_of_ranked_players):
-                    name = totals_list[i][0]
-                    points = totals_list[i][1]
-                    position = totals_list[i][2]
+                    name = top_players[i][0]
+                    points = top_players[i][1]
+                    position = top_players[i][2]
                     print(f"{i + 1}. {name} ({position}): {points} pts")
 
                 
