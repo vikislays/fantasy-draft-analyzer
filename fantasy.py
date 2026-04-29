@@ -124,7 +124,7 @@ def main():
                 try:
                     number_of_ranked_players = int(input(f"Please choose how many players you'd like to compare (1-{total_number_of_players}): "))
                     #print(f"total number of ranked players:{number_of_ranked_players}, total number of players:{total_number_of_players}")
-                    if number_of_ranked_players not in range(1, total_number_of_players):
+                    if number_of_ranked_players not in range(1, total_number_of_players + 1):
                         print(f"Invalid Selection. Choose number between 1 and {total_number_of_players}. Default: 10")
                         continue    
                 except ValueError:
