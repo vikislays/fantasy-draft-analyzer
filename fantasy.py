@@ -1,10 +1,12 @@
 import csv
+from decimal import Decimal, ROUND_HALF_UP
 
 def print_menu():
     print("---Main Menu---")
     print("1 - Print Player Statistics")
     print("2 - Top Ten Players by Points")
-    print("0 - Quit")
+    print("3 - Quit")
+
 
 def load_file():
     players = []
@@ -15,6 +17,7 @@ def load_file():
             players.append(row)
     return players
 
+
 def print_player_card(player_name, position, games):
     print("===============================")
     print(f"{player_name}, {position}")
@@ -24,7 +27,7 @@ def print_player_card(player_name, position, games):
     for game in games:
         points = game[1]
         if points:
-            total_points += float(points)
+            total_points += round_number(points)
             games_played += 1
             print(f"GW {game[0]}: {points} pts")
         else:
@@ -39,6 +42,7 @@ def print_player_card(player_name, position, games):
     print(f"Games played: {games_played}")
     print(f"Points per game: {average}")
 
+
 def find_player(players, player_name):
     games = list()
     for row in players:
@@ -48,14 +52,22 @@ def find_player(players, player_name):
 
     print_player_card(player_name, position, games)
 
+
+def round_number(point):
+    value = Decimal(point)
+    rounded = value.quantize(Decimal("0.0"), rounding=ROUND_HALF_UP)
+    return rounded
+
+
 def sum_player_totals(players):
     player_totals = {}
     for row in players:
         player_name = row[0]
         position = row[1]
-        points = float(row[3]) if row[3] else 0
+        points = row[3] if row[3] else 0
+        points = round_number(points)
         if player_name in player_totals:
-            player_totals[player_name][0] += points
+            player_totals[player_name][0] += points 
         else:
             player_totals[player_name] = [points, position]
 
@@ -73,7 +85,7 @@ def main():
             
             if menu_selection == 1:
                 player_name = input("Enter player name: ")
-                #player_name = "Cade Otton"
+                player_name = "Cade Otton"
                 find_player(players, player_name)
             elif menu_selection == 2:
                 player_position = input("Please choose position (WR, RB, TE, ALL(default)): ")
@@ -86,7 +98,7 @@ def main():
                     print("Invalid input. Try one of the options.")
                 
                 total_number_of_players = len(player_totals)
-                number_of_ranked_players = 10  # default
+                number_of_ranked_players = 10  
                 try:
                     number_of_ranked_players = int(input(f"Please choose how many players you'd like to compare (1-{total_number_of_players}): "))
                     #print(f"total number of ranked players:{number_of_ranked_players}, total number of players:{total_number_of_players}")
@@ -117,7 +129,7 @@ def main():
                     print(f"{i + 1}. {name} ({position}): {points} pts")
 
                 
-            elif menu_selection == 0:
+            elif menu_selection == 3:
                 break
             else:
                 print("Invalid selection.")
